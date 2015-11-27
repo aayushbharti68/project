@@ -29,27 +29,27 @@
     try{
         String sql="";
         int i=1;
-        String year=request.getParameter("syear");
+        String year=request.getParameter("year");
         String top=request.getParameter("stop");
         String sex=request.getParameter("sex");
         //out.println(year+","+top+","+sex);
-        Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+        Class.forName("com.mysql.jdbc.Driver");
         if(sex.equals("M") || sex.equals("F"))
-            sql="select syear,sname,gender from hospital where syear="+Integer.parseInt(year)+" and gender='"+sex+"' order by amount desc";
+            sql="select * from baby_names where year="+Integer.parseInt(year)+" and gender='"+sex+"' order by frequency desc";
                 else if(sex.equals("B"))
-                  sql="select syear,sname,gender from hospital where syear="+Integer.parseInt(year)+" order by amount desc";
+                  sql="select * from baby_names where year="+Integer.parseInt(year)+" order by frequency desc";
           // out.println(sql);       
-        Connection con=DriverManager.getConnection("jdbc:odbc:geit");
+        Connection con=DriverManager.getConnection("jdbc:mysql://localhost/geu","root","root");
         Statement stmt=con.createStatement();
         ResultSet rs=stmt.executeQuery(sql);
         out.println("<table border=1 width='50%'>");
-        out.print("<tr><th>Year</th><th>Name</th><th>Sex</th></tr>");
+        out.print("<tr><th>Year</th><th>Name</th><th>Sex</th><th>frequency</th><th>position</th></tr>");
         int flag=0;
         while(i<=Integer.parseInt(top))
                        {
             flag=1;
             rs.next();
-            out.println("<tr><td>"+rs.getInt(1)+"</td><td>"+rs.getString(2)+"</td><td>"+rs.getString(3)+"</td></tr>");
+            out.println("<tr><td>"+rs.getInt(1)+"</td><td>"+rs.getString(2)+"</td><td>"+rs.getString(3)+"</td><td>"+rs.getInt(4)+"</td><td>"+rs.getInt(5)+"</td></tr>");
             i++;
                      }
         out.println("</table>");
